@@ -281,7 +281,7 @@ dynatop <- R6::R6Class(
             
             ## match options and check
             transmissivity_profile <- match.arg(model$options["transmissivity_profile"],
-                                               c("exponential","exponential_explicit","constant","bounded_exponential"))
+                                               c("exponential","exponential_explicit","constant","bounded_exponential","bounded_exponential_pet"))
             channel_solver <- match.arg(model$options["channel_solver"],
                                         c("histogram"))
             
@@ -291,6 +291,7 @@ dynatop <- R6::R6Class(
                            "exponential" = c(pnms,"ln_t0","m"),
                            "exponential_explicit" = c(pnms,"ln_t0","m"),
                            "bounded_exponential" = c(pnms,"ln_t0","m","D"),
+                           "bounded_exponential_pet" = c(pnms,"ln_t0","m","D"),
                            "constant" = c(pnms,"c_sz","D"))
             
             snms <- c("s_sf","s_rz","s_uz","s_sz") # state names
@@ -680,6 +681,10 @@ dynatop <- R6::R6Class(
                                              private$model$channel,
                                              private$model$flow_direction,
                                              q0),
+                   "bounded_exponential_pet" = dt_bexp_pet_init(private$model$hillslope,
+                                                                private$model$channel,
+                                                                private$model$flow_direction,
+                                                                q0),
                    stop("This is not yet implimented")
                    )
 
@@ -714,7 +719,11 @@ dynatop <- R6::R6Class(
                    "constant" = dt_cnst_courant(private$model$hillslope,
                                                   courant,
                                                   ts$step,
-                                                  ts$n_sub_step),
+                                                ts$n_sub_step),
+                   "bounded_exponential_pet" = dt_bexp_pet_courant(private$model$hillslope,
+                                                                   courant,
+                                                                   ts$step,
+                                                                   ts$n_sub_step),
                    stop("This is not yet implimented")
                    )
             ## Display number of sub steps required
@@ -817,6 +826,20 @@ dynatop <- R6::R6Class(
                                                  ts$step,
                                                  ts$n_sub_step
                                                  ),
+                   "bounded_exponential_pet" = dt_bexp_pet_implicit(private$model$hillslope,
+                                                                    private$model$channel,
+                                                                    private$model$flow_direction,
+                                                                    private$summary$precip_input,
+                                                                    private$summary$pet_input,
+                                                                    private$time_series$obs,
+                                                                    private$time_series$channel_inflow$surface,
+                                                                    private$time_series$channel_inflow$saturated,
+                                                                    private$time_series$mass_balance,
+                                                                    as.logical( keep_states ),
+                                                                    private$time_series$state_record,
+                                                                    ts$step,
+                                                                    ts$n_sub_step
+                                                                    ),
                    stop("This is not yet implimented")
                    )
             

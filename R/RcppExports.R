@@ -13,6 +13,18 @@ dt_bexp_implicit <- function(hillslope, channel, flow_direction, precip_input, p
     invisible(.Call(`_dynatop_dt_bexp_implicit`, hillslope, channel, flow_direction, precip_input, pet_input, obs, channel_inflow_sf, channel_inflow_sz, mass_balance, keep_states, state_rec, timestep, n_sub_step))
 }
 
+dt_bexp_pet_courant <- function(hillslope, courant, timestep, n_sub_step) {
+    invisible(.Call(`_dynatop_dt_bexp_pet_courant`, hillslope, courant, timestep, n_sub_step))
+}
+
+dt_bexp_pet_init <- function(hillslope, channel, flow_direction, r_uz_sz_0) {
+    invisible(.Call(`_dynatop_dt_bexp_pet_init`, hillslope, channel, flow_direction, r_uz_sz_0))
+}
+
+dt_bexp_pet_implicit <- function(hillslope, channel, flow_direction, precip_input, pet_input, obs, channel_inflow_sf, channel_inflow_sz, mass_balance, keep_states, state_rec, timestep, n_sub_step) {
+    invisible(.Call(`_dynatop_dt_bexp_pet_implicit`, hillslope, channel, flow_direction, precip_input, pet_input, obs, channel_inflow_sf, channel_inflow_sz, mass_balance, keep_states, state_rec, timestep, n_sub_step))
+}
+
 dt_cnst_courant <- function(hillslope, courant, timestep, n_sub_step) {
     invisible(.Call(`_dynatop_dt_cnst_courant`, hillslope, courant, timestep, n_sub_step))
 }
